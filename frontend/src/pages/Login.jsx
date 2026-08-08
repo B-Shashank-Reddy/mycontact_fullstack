@@ -1,0 +1,94 @@
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import api from '../api'
+import auth from '../auth'
+
+export default function Login() {
+  const [form, setForm] = useState({ email: '', password: '' })
+  const [err, setErr] = useState('')
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
+
+  const submit = async (e) => {
+    e.preventDefault()
+    setErr('')
+
+    if (!form.email || !form.password) {
+      setErr('Email and password are required')
+      return
+    }
+
+    setLoading(true)
+    try {
+      const res = await api.post('/users/login', form)
+      auth.setToken(res.data.accessToken)
+      navigate('/contacts')
+    } catch (e) {
+      setErr(e.response?.data?.message || e.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <section className="animate-fade-in-up mx-auto max-w-md">
+      <div className="elevated rounded-2xl border p-6 sm:p-8">
+        <h1 className="mb-2 text-2xl font-semibold">Login</h1>
+        <p className="mb-6 text-sm text-muted-foreground">
+          Login to your workspace.
+        </p>
+
+        <form onSubmit={submit} className="space-y-4">
+          <div className="space-y-2">
+            <label htmlFor="email" className="text-sm font-medium">
+              Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              placeholder="Email"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              className="field-input"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="password" className="text-sm font-medium">
+              Password
+            </label>
+            <input
+              id="password"
+              type="password"
+              placeholder="Password"
+              value={form.password}
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
+              className="field-input"
+            />
+          </div>
+
+          {err && (
+            <div className="rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+              {err}
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="inline-flex h-10 w-full items-center justify-center rounded-lg bg-primary text-sm font-medium text-primary-foreground shadow-sm transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {loading ? 'Signing in…' : 'Login'}
+          </button>
+        </form>
+
+        <p className="mt-6 text-center text-sm text-muted-foreground">
+          New here?{' '}
+          <Link to="/register" className="text-link">
+            Create an account
+          </Link>
+        </p>
+      </div>
+    </section>
+  )
+}
