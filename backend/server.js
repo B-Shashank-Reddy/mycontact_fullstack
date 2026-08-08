@@ -32,7 +32,7 @@ const distPath = path.join(__dirname, '..', 'frontend', 'dist');
 app.use(express.static(distPath));
 
 // For any non-API route, serve index.html so the SPA router can handle it
-app.get('*', (req, res, next) => {
+app.get('/*', (req, res, next) => {
   if (req.path.startsWith('/api')) return next();
   res.sendFile(path.join(distPath, 'index.html'));
 });
