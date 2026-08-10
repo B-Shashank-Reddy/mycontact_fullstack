@@ -40,7 +40,7 @@ export default function Contacts() {
   const load = async () => {
     setErr('')
     try {
-      const res = await api.get('/contacts')
+      const res = await api.get('/api/contacts')
       setContacts(res.data)
     } catch (e) {
       setErr(e.response?.data?.message || e.message)
@@ -70,9 +70,9 @@ export default function Contacts() {
     setSaving(true)
     try {
       if (editing) {
-        await api.put(`/contacts/${editing._id}`, form)
+        await api.put(`/api/contacts/${editing._id}`, form)
       } else {
-        await api.post('/contacts', form)
+        await api.post('/api/contacts', form)
       }
       resetForm()
       await load()
@@ -88,7 +88,7 @@ export default function Contacts() {
 
     setErr('')
     try {
-      await api.delete(`/contacts/${id}`)
+      await api.delete(`/api/contacts/${id}`)
       if (editing?._id === id) resetForm()
       await load()
     } catch (e) {

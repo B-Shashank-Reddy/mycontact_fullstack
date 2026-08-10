@@ -20,7 +20,7 @@ export default function Login() {
 
     setLoading(true)
     try {
-      const res = await api.post('/users/login', form)
+      const res = await api.post('/api/users/login', form)
       auth.setToken(res.data.accessToken)
       navigate('/contacts')
     } catch (e) {

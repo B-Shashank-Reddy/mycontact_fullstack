@@ -23,7 +23,7 @@ export default function Register() {
 
     setLoading(true)
     try {
-      await api.post('/users/register', form)
+      await api.post('/api/users/register', form)
       navigate('/login')
     } catch (e) {
       setErr(e.response?.data?.message || e.message)
