@@ -28,7 +28,7 @@ npm run dev:frontend
 4. Visit `http://localhost:5173`
 
 
-5. Go Live: https://mycontact-fullstack.vercel.app/
+5. Go Live: [https://mycontact-fullstack.vercel.app/](https://mycontactfrontenddep.vercel.app/)
 ## Deployment notes
 
 - The backend uses `process.env.MONGO_URI`.
