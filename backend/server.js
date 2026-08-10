@@ -8,7 +8,11 @@ const connectDb = require("./config/dbConnection");
 
 const app = express();
 const port = process.env.PORT || 5001;
-app.use(cors())
+const cors = require('cors');
+
+// Allow all origins (easiest for testing)
+app.use(cors()); 
+
 app.use(express.json());
 // Simple CORS middleware to allow frontend dev server access
 app.use((req, res, next) => {
@@ -21,10 +25,22 @@ app.use((req, res, next) => {
   if (req.method === "OPTIONS") return res.sendStatus(200);
   next();
 });
+app.get('/', (req, res) => {
+  res.status(200).json({ message: 'MyContact backend is running' });
+});
+
 app.use("/api/contacts", require("./routes/contactRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
 app.use(errorHandler);
-connectDb();
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+
+const startServer = async () => {
+  await connectDb();
+  app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+  });
+};
+
+startServer().catch((error) => {
+  console.error('Failed to start server:', error);
+  process.exit(1);
 });
