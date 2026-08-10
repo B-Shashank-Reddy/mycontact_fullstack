@@ -8,7 +8,7 @@ const connectDb = require("./config/dbConnection");
 
 const app = express();
 const port = process.env.PORT || 5001;
-
+app.use(cors())
 app.use(express.json());
 // Simple CORS middleware to allow frontend dev server access
 app.use((req, res, next) => {
